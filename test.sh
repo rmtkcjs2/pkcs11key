@@ -71,3 +71,9 @@ bench silly_signer testdata/silly_signer.pem
 if [ -n "${SOFTHSM2_CONF}" ] ; then
   bench entropic_ecdsa testdata/entropic_ecdsa.pem
 fi
+
+cd v4/testdata
+openssl ecparam -name prime256v1 -genkey | openssl pkcs8 -topk8 -nocrypt > entropic_ecdsa.key
+openssl req -new -x509 -key entropic_ecdsa.key -out entropic_ecdsa.pem -days 1000 -subj /CN=entropic\ ECDSA
+openssl req -new -newkey rsa:2048 -nodes -x509 -keyout silly_signer.key -out silly_signer.pem -days 1000 -subj /CN=silly\ signer
+cd -
